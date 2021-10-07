@@ -2,7 +2,7 @@
 import React from 'react';
 import AddUni from '../components/AddUni';
 import Navbar from '../components/Navbar';
-import UTable from '../components/UniversityTable';
+import UniversityTable from '../components/UniversityTable';
 
 const AdminPage = () => {
     console.log("Admin");
@@ -10,7 +10,7 @@ const AdminPage = () => {
         <div>
             <Navbar/>
             <AddUni/>
-            <UTable/>
+            <UniversityTable/>
         </div>
     );
 };

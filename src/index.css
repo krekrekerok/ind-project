@@ -11,3 +11,31 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 } */
+
+.navbar {
+  /* display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox; */
+  /* display: flex; */
+  -webkit-box-pack: center;
+  /* -ms-flex-pack: center;
+  -webkit-justify-content: center; */
+  /* justify-content: center; */
+  position: fixed;
+  top: 0px;
+  width: var(--chakra-sizes-full);
+  min-height: 60px;
+  box-shadow: var(--chakra-shadows-sm);
+  z-index: 999;
+  -webkit-backdrop-filter: saturate(180%) blur(5px);
+  backdrop-filter: saturate(500%) blur(5px);
+  background-color: rgba(0, 99, 99, 0.2)
+}
+
+a{
+  text-decoration: none;
+}
+
+.uImage {
+  background:rgba(0,0,0,0.6);
+}

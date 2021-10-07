@@ -1,61 +1,55 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { collection, doc, onSnapshot, setDoc, addDoc, deleteDoc } from '@firebase/firestore';
+import { collection, doc, onSnapshot, setDoc, addDoc, getDoc } from '@firebase/firestore';
 import db from '../Firebase';
 import { isEmpty } from 'lodash';
 import { Container, Grid, HStack, Stack } from '@chakra-ui/layout';
-import { Link, Box, Input, InputGroup, InputLeftElement, Button, FormControl,useColorModeValue } from "@chakra-ui/react"
+import { Link, Box, Input, InputGroup, InputLeftElement, Button, FormControl } from "@chakra-ui/react"
 import { GiTrophyCup, GiInfo, GiWhiteTower, GiChecklist, GiCoins } from 'react-icons/gi'
 import { FaFileInvoice, FaLink, FaFileContract } from 'react-icons/fa'
 import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption} from "@chakra-ui/react"
 import { adminContext } from '../context/AdminContext';
-import { handleClick} from '../helpers/handles';
+import { handleEdit } from '../helpers/handles';
+import {useHistory, useParams } from 'react-router';
 
 
-const AddUni = () => {
-    const [newUni, setNewUni] = useState({
-            name: "",
-            rank: "",
-            status:"",
-            totalFaculty: "",
-            tuitionStart: "",
-            aveForGrant: "",
-            grantCount: "",
-            link: "",
-        })
-        // fb start
+const EditUni = () => {
+    const {createUniversity} = useContext(adminContext)
+    const { id } = useParams();
+    const history = useHistory()
+
+    console.log(id);
+    // fb start
     const [uniList, setUniList] = useState([])
+    
+    console.log("uniList",uniList)
+    const [EditedUni, setEditedUni] = useState({})
 
-        console.log("uniList",uniList)
         useEffect(
             () => 
-              onSnapshot(collection(db, "universities"), (snapshot) => 
-              setUniList(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+            onSnapshot(doc(db, "universities", id), (doc) => 
+              setUniList(doc.data())
               ),
             []
         )
 
         // fb end
-    const deleteUni= async(id) => {
-        await deleteDoc(doc(db, "universities", id))
-        console.log("deleted")
-    }
-    function handleInputs(e){
+    const handleInputs = (e) => {
         let obj = {
-            ...newUni,
+            ...EditedUni,
             [e.target.name]: e.target.value
         }
-        setNewUni(obj)
+        setEditedUni(obj)
     }
-    console.log(newUni);
+    console.log(EditedUni);
 
 
     return (
         <>
-        <Container mt="90px" p={8} maxW = "container.sm" bg={useColorModeValue("blue.300","cyan.900")}>
+        <Container p={8} maxW = "container.sm" bg="cyan.800">
             <form action = "submit" 
             // onSubmit = {handleSubmit}
             >
-                <Stack spacing={3} color="white">
+                <Stack spacing={3} color="gray.500">
                     {/* name */}
                     <FormControl isRequired>
                         <InputGroup>
@@ -64,10 +58,9 @@ const AddUni = () => {
                                 children={<GiInfo color="grey.500" />}
                             />
                             <Input
-                                value={newUni.name}
+                                defaultValue={uniList.name}
                                 name = "name"
                                 placeholder="University name" 
-                                _placeholder={{ color: 'cyan.100' }}
                                 onChange = {handleInputs}
                                 />
                         </InputGroup>
@@ -85,10 +78,9 @@ const AddUni = () => {
                                 <Input 
                                     w="100%" 
                                     type="number" 
-                                    value={newUni.rank}
+                                    defaultValue={uniList.rank}
                                     name = "rank"
                                     placeholder="Rank"
-                                    _placeholder={{ color: 'cyan.100' }}
                                     onChange = {handleInputs}
                                     />
                           </InputGroup>
@@ -104,10 +96,9 @@ const AddUni = () => {
                                 <Input 
                                     w="100%" 
                                     type="number" 
-                                    value={newUni.totalFaculty}
+                                    defaultValue={uniList.totalFaculty}
                                     name = "totalFaculty"
                                     placeholder="Number of faculties" 
-                                    _placeholder={{ color: 'cyan.100' }}
                                     onChange = {handleInputs}
                                     />
                             </InputGroup>
@@ -123,10 +114,9 @@ const AddUni = () => {
                                 <Input 
                                     w="100%" 
                                     type="number" 
-                                    value={newUni.tuitionStart}
+                                    defaultValue={uniList.tuitionStart}
                                     name = "tuitionStart"
                                     placeholder="Min tuition fee" 
-                                    _placeholder={{ color: 'cyan.100' }}
                                     onChange = {handleInputs}
                                     />
                             </InputGroup>
@@ -140,10 +130,9 @@ const AddUni = () => {
                                     children={<GiWhiteTower color="grey.500" />}
                                 />
                                 <Input 
-                                    value={newUni.status}
+                                    defaultValue={uniList.status}
                                     name = "status"
                                     placeholder="Status" 
-                                    _placeholder={{ color: 'cyan.100' }}
                                     onChange = {handleInputs}
                                     />
                             </InputGroup>
@@ -158,10 +147,9 @@ const AddUni = () => {
                                 />
                                 <Input 
                                     type="number" 
-                                    value={newUni.aveForGrant}
+                                    defaultValue={uniList.aveForGrant}
                                     name = "aveForGrant"
                                     placeholder="Average score for grant" 
-                                    _placeholder={{ color: 'cyan.100' }}
                                     onChange = {handleInputs}
                                     />
                             </InputGroup>
@@ -176,17 +164,14 @@ const AddUni = () => {
                                 />
                                 <Input 
                                     type="number" 
-                                    value={newUni.grantCount}
+                                    defaultValue={uniList.grantCount}
                                     name = "grantCount"
                                     placeholder="Total grants" 
-                                    _placeholder={{ color: 'cyan.100' }}
                                     onChange = {handleInputs}
                                     />
                             </InputGroup>
                         </FormControl>
                     </Grid>
-
-
 
                     {/* link */}
                     <FormControl isRequired>
@@ -196,124 +181,27 @@ const AddUni = () => {
                                 children={<FaLink color="grey.500" />}
                             />
                             <Input 
-                                value={newUni.link}
+                                defaultValue={uniList.link}
                                 name = "link"
                                 placeholder="University link"
-                                _placeholder={{ color: 'cyan.100' }}
                                 onChange = {handleInputs}
                                  />
                         </InputGroup>
                     </FormControl>
                     <Button
-                    color = "gray.600"
                     onClick = {(e) => {
                         e.preventDefault()
-                        if (
-                            !newUni.name.trim() ||
-                            !newUni.rank.trim() ||
-                            !newUni.totalFaculty.trim() ||
-                            !newUni.tuitionStart.trim() ||
-                            !newUni.status.trim() ||
-                            !newUni.aveForGrant.trim() ||
-                            !newUni.grantCount.trim() ||
-                            !newUni.link.trim()
-                            ) {
-                                alert("Заполните все поля!")
-                                return
-                            }
-                            handleClick(newUni)
-
-                            setNewUni({
-                                name: "",
-                                rank: "",
-                                status:"",
-                                totalFaculty: "",
-                                tuitionStart: "",
-                                aveForGrant: "",
-                                grantCount: "",
-                                link: "",
-                            })
+                        handleEdit(id, EditedUni)
+                        console.log("clicked");
+                        history.push("/admin")
                     }}
                         > Save 
                     </Button>
                 </Stack>                
             </form>
         </Container>
-        {/* <Container p={5} maxW = "container.lg" bg="cyan.500"> */}
-            <Table variant="striped">
-                <TableCaption>2021 updated</TableCaption>
-                <Thead>
-                    
-                    <Tr>
-                        <Th isNumeric>№</Th>
-                        <Th>University</Th>
-                        <Th isNumeric>Rank</Th>
-                        <Th isNumeric>Number of faculties</Th>
-                        <Th isNumeric>Min tuition fee</Th>
-                        <Th>Status</Th>
-                        <Th isNumeric>Mean for grant</Th>
-                        <Th isNumeric>Total grants</Th>
-                        <Th>Link</Th>
-                        <Th></Th>
-                        <Th></Th>
-                    </Tr>
-                </Thead>
-
-                <Tbody>
-                    {uniList.map((row, index) => (
-                        <Tr key = {row.id}>
-                            <Td isNumeric>{index + 1}</Td>
-                            <Td>{row.name}</Td>
-                            <Td>{row.rank}</Td>
-                            <Td isNumeric>{row.totalFaculty}</Td>
-                            <Td isNumeric>{row.tuitionStart}</Td>
-                            <Td>{row.status}</Td>
-                            <Td isNumeric>{row.aveForGrant}</Td>
-                            <Td isNumeric>{row.grantCount}</Td>
-                            <Td>{row.link}</Td>
-
-                            <Td>
-                                <Link
-                                href={`/edit/${row.id}`}
-                                textDecoration = "none"
-                                >
-                                    <Button 
-                                            px={2}
-                                            py={1}
-                                            rounded={'md'}
-                                            bg= "yellow.300"
-                                            textDecoration = 'none'
-                                            _hover={{
-                                            bg: 'green.300',
-                                            color: "red"
-                                            }} 
-                                            // onClick = {() => {handleEdit(row.id)}}
-                                        >EDIT
-                                    </Button>
-                                </Link>
-                            </Td>
-                            <Td>
-                                <Button    
-                                        onClick = {()=>deleteUni(row.id)}
-                                        px={2}
-                                        py={1}
-                                        rounded={'md'}
-                                        bg = "red.300"
-                                        _hover={{
-                                        textDecoration: 'none',
-                                        bg: 'gray.400',
-                                        color: "white"
-                                        }} 
-                                       >DEL
-                                </Button>
-                            </Td>
-                        </Tr>
-                    ))}
-                </Tbody>
-            </Table>
-        {/* </Container> */}
         </>
     );
 };
 
-export default AddUni;
+export default EditUni;
