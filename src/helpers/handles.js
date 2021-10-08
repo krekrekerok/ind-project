@@ -36,6 +36,17 @@ export const handleClick = async(newUni) => {
     console.log("new uniID:", docRef.id);
 
 }
+export const handleCommentClick = async(newComment) => {
+    const collectionRef = collection(db, "comments")
+    const payload = {
+        name: newComment.name,
+        commentText: newComment.commentText}
+        
+    const docRef = await addDoc(collectionRef, payload)
+    console.log("button clicked");
+    console.log("new comment id:", docRef.id);
+
+}
 
 export const handleEdit = async(id, editedUni) => {
     const docRef = doc(db, "universities", id)

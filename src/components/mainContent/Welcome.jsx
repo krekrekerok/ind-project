@@ -101,7 +101,7 @@ import db from '../../Firebase'
                     color = "whiteAlpha.800"
                     name = "name"
                     rounded={'full'}
-                    placeholder="Поиск" 
+                    placeholder="Поиск по сайту" 
                     bg={'whiteAlpha.400'}
                     _hover={{ bg: 'whiteAlpha.500'}}
                     />
