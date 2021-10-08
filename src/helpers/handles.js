@@ -1,7 +1,24 @@
-import { collection, doc, setDoc, addDoc, updateDoc } from '@firebase/firestore';
+import { collection, doc, addDoc, updateDoc } from '@firebase/firestore';
 import db from '../Firebase';
 
 
+export const handleFavs = async(favUni) => {
+    const collectionRef = collection(db, "favorites")
+    const payload = {
+        name: favUni.name,
+        rank: +(favUni.rank), 
+        status: favUni.status, 
+        totalFaculty: +(favUni.totalFaculty), 
+        tuitionStart: +(favUni.tuitionStart),
+        aveForGrant: +(favUni.aveForGrant),
+        grantCount: +(favUni.grantCount),
+        link: favUni.link}
+        
+    const docRef = await addDoc(collectionRef, payload)
+    console.log("button clicked");
+    console.log("favUniID:", docRef.id)
+
+}
 export const handleClick = async(newUni) => {
     const collectionRef = collection(db, "universities")
     const payload = {
@@ -15,18 +32,6 @@ export const handleClick = async(newUni) => {
         link: newUni.link}
         
     const docRef = await addDoc(collectionRef, payload)
-
-    // const payload = {
-    //     name: "Кыргызская государственная юридическая академия",
-    //     rank: 8, 
-    //     status:"Государственный" , 
-    //     totalFaculty: 16, 
-    //     tuitionStart: 29950 ,
-    //     aveForGrant: 385,
-    //     grantCount: 86,
-    //     link: "https://www.ksla.kg/ru/" }
-    // const docRef = doc(db, "universities", "tNmGnEoB8yk2wpWcM7t9")
-    // await setDoc(docRef, payload)
     console.log("button clicked");
     console.log("new uniID:", docRef.id);
 
@@ -39,3 +44,17 @@ export const handleEdit = async(id, editedUni) => {
     console.log("update");
     console.log("Here: ", payload);
 }
+
+
+//////////////////////add///////////////////
+    // const payload = {
+    //     name: "Кыргызская государственная юридическая академия",
+    //     rank: 8, 
+    //     status:"Государственный" , 
+    //     totalFaculty: 16, 
+    //     tuitionStart: 29950 ,
+    //     aveForGrant: 385,
+    //     grantCount: 86,
+    //     link: "https://www.ksla.kg/ru/" }
+    // const docRef = doc(db, "universities", "tNmGnEoB8yk2wpWcM7t9")
+    // await setDoc(docRef, payload)

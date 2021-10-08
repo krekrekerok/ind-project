@@ -3,15 +3,21 @@ import { auth } from "../Firebase";
 import {createUserWithEmailAndPassword, 
         signInWithEmailAndPassword,
         onAuthStateChanged,
-        signOut
+        signOut,
+        sendPasswordResetEmail,
+        confirmPasswordReset
         } from "firebase/auth"
 
-const authContext = createContext({
-    currentUser: null,
-    register: () => Promise,
-    login: () => Promise,
-    logout: () => Promise,
-})
+const authContext = createContext(
+//     {
+//     currentUser: null,
+//     register: () => Promise,
+//     login: () => Promise,
+//     logout: () => Promise,
+//     forgotPassword: () => Promise,
+//     resetPassword: () => Promise,
+// }
+)
 
 export const useAuth = () => useContext(authContext)
 
@@ -40,12 +46,24 @@ const AuthContextProvider = ({children}) => {
         return signOut(auth)
     }
 
+    const forgotPassword = (email) => {
+        return sendPasswordResetEmail(auth, email, 
+            {url: "http://localhost:3000/signin"}
+        )
+    }
+
+    const resetPassword = (oobCode, newPassword) => {
+        return confirmPasswordReset(auth, oobCode, newPassword)
+    }
+
     return (
         <authContext.Provider value = {{
             currentUser,
             register,
             login,
-            logout
+            logout,
+            forgotPassword,
+            resetPassword
         }}>
             {children}
         </authContext.Provider>

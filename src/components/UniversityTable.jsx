@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container,Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption} from "@chakra-ui/react"
+import { Container,Table, Thead, Tbody, Tr, Th, TableCaption} from "@chakra-ui/react"
 
 
 const UniversityTable = () => {

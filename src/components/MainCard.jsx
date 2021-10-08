@@ -11,36 +11,31 @@ import { collection, onSnapshot } from '@firebase/firestore';
 import { useEffect, useState } from 'react';
 import { AiOutlineStar} from 'react-icons/ai'
 // import { handleFavs } from '../../helpers/handles';
-import db from '../../Firebase'
-import {Rating} from 'react-simple-star-rating'
+import db from '../Firebase'
 
 const uImage = 'https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT4t6TL37OJ7LSUpAH55eZDgtZB7PuJgMJMUdyaAEw3tTBvexHF'
 
 
-export default function InfoCard({item}) {
-    const [uniCard, setUniCard] = useState()
-    const [rating, setRating] = useState(0)
+export default function MainCard({uniDetails}) {
+    // const [uniCard, setUniCard] = useState()
 
-    const handleRating = (rate) => {
-      setRating(rate)
-      // Some logic
-    }
+    // useEffect(
+    //   () => 
+    //   onSnapshot(collection(db, "universities"), (snapshot) => 
+    //   setUniCard(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+    //   ),
+    //   []
+    // )
 
-    useEffect(
-      () => 
-      onSnapshot(collection(db, "universities"), (snapshot) => 
-      setUniCard(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
-      ),
-      []
-    )
+    console.log(uniDetails);
 
   return (
     <Stack p={{ sm: 9, base: 5, lg: 6}}
     
     >
       <Box
-        w={{ sm: 305, base: 225, lg: 315}}
-        h={{ sm: 320, base: 270, lg: 350}}
+        w={{ sm: 405, base: 325, lg: 415}}
+        h={{ sm: 420, base: 370, lg: 400}}
         bg={useColorModeValue('white', 'gray.700')}
         boxShadow={'2xl'}
         rounded={'2xl'}
@@ -48,8 +43,8 @@ export default function InfoCard({item}) {
         flexDirection = {'column'}
         >
         <Box
-          rounded={'2xl'}
           h={'150px'}
+          rounded={'2xl'}
           bg={'gray.500'}
           mt={-6}
           mx={-6}
@@ -104,12 +99,7 @@ export default function InfoCard({item}) {
             bottom = {-1}
             right = {3}
             color={'white'}
-            >
-                {item.tuitionStart===0 ? 
-                ("Бесплатно*"
-                ):(
-                  `От ${item.tuitionStart} сом/год`
-                  )}
+            > min tuition
           </Text>
           <Image
             className = "uImage"
@@ -128,13 +118,11 @@ export default function InfoCard({item}) {
             _hover = {{
               color: 'blue.700'
             }}
-            href = {`/details/${item.id}`}
-            noOfLines={4}
+            href = "/details"
             // fontFamily={'body'}
             >
-            {item.name}
+            {/* {uniDetails.name} */}
           </Heading>
-          <Rating onClick={handleRating} ratingValue={rating} /* Rating Props */ />
         </Stack>
       </Box>
     </Stack>

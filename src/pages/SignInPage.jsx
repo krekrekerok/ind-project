@@ -11,14 +11,13 @@ import {
     Image,
     useToast
   } from '@chakra-ui/react';
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useRef, useState } from 'react';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory} from 'react-router';
+import Navbar from '../components/Navbar';
 import { useAuth } from '../context/AuthContext';
 
 export default function SignInPage() {
     const history = useHistory()
-    const location = useLocation()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -49,7 +48,6 @@ export default function SignInPage() {
         .then((response) =>{
           console.log(response)
           history.push("/")
-          // history.push(location.state?.from ?? "/")
         })
         .catch((error) =>{ 
           console.log(error.message)
@@ -66,6 +64,7 @@ export default function SignInPage() {
 
     return (
       <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
+        <Navbar/>
         <Flex p={8} flex={1} align={'center'} justify={'center'}>
           <form
             onSubmit={handleSubmit}>
@@ -101,7 +100,7 @@ export default function SignInPage() {
                   align={'start'}
                   justify={'space-between'}>
                   <Checkbox>Remember me</Checkbox>
-                  <Link color={'blue.300'}>Forgot password?</Link>
+                  <Link href="/forgotp" color={'blue.300'}>Forgot password?</Link>
                 </Stack>
                   <Link href="/signup" color={'blue.300'}>Don't have an account? Register now</Link>
                 <Button

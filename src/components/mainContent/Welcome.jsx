@@ -5,9 +5,46 @@ import {
     Text,
     VStack,
     useBreakpointValue,
+    InputGroup,
+    InputLeftElement,
+    Input
   } from '@chakra-ui/react';
+import { collection, onSnapshot } from '@firebase/firestore';
+import { useEffect, useState } from 'react';
+  import {BsSearch} from 'react-icons/bs'
+import { useHistory } from 'react-router';
+import db from '../../Firebase'
   
   export default function Welcome() {
+    const history = useHistory()
+    const [searchValue, setSearchValue] = useState()
+
+    const [uniList, setUniList] = useState([])
+
+    console.log("uniList",uniList)
+    // const getUniversities = () =>
+    useEffect(
+        () => 
+          onSnapshot(collection(db, "universities"), (snapshot) => 
+          setUniList(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id})))
+          ),
+        []
+    )
+    
+    const filterProducts = (key, value) => {
+      let search = new URLSearchParams(history.location.search)
+      search.set(key, value)
+      let url = `${history.location.pathname}?${search.toString()}`
+      history.push(url)
+      setSearchValue(search.get('q'))
+      return uniList
+    }
+    
+    let search = new URLSearchParams(history.location.search)
+    useEffect(() => {
+      setSearchValue(search.get('q') || '')
+    }, [history.location])
+
     return (
       <Flex
         w={'full'}
@@ -41,20 +78,39 @@ import {
               Мы помогаем людям выбирать образование, а учебным заведениям — находить своих студентов.
             </Text>
             <Stack direction={'row'}>
-              <Button
+              {/* <Button
                 bg={'gray.300'}
                 rounded={'full'}
                 color={'black'}
                 _hover={{ bg: 'blue.500' }}>
                 Смотреть ВУЗы
-              </Button>
-              <Button
-                bg={'whiteAlpha.400'}
-                rounded={'full'}
-                color={'white'}
-                _hover={{ bg: 'whiteAlpha.500' }}>
-                    Перейти к избранным
-              </Button>
+              </Button> */}
+              <InputGroup>
+                <InputLeftElement
+                    pointerEvents="none"
+                    children={<BsSearch color="whiteAlpha.900" />}
+                />
+                <Input
+                    // value=''
+                    w ={270}
+                    value = {searchValue}
+                    onChange = {(e) => filterProducts('q', e.target.value)}
+                    // h = {10}
+                    fontSize = 'lg'
+                    border = 'none'
+                    color = "whiteAlpha.800"
+                    name = "name"
+                    rounded={'full'}
+                    placeholder="Поиск" 
+                    bg={'whiteAlpha.400'}
+                    _hover={{ bg: 'whiteAlpha.500'}}
+                    />
+                </InputGroup>
+
+              {/* <Button
+                >
+                    Поиск
+              </Button> */}
             </Stack>
           </Stack>
         </VStack>

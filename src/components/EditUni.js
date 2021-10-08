@@ -1,19 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { collection, doc, onSnapshot, setDoc, addDoc, getDoc } from '@firebase/firestore';
+import React, { useState, useEffect } from 'react';
+import {  doc, onSnapshot, } from '@firebase/firestore';
 import db from '../Firebase';
-import { isEmpty } from 'lodash';
-import { Container, Grid, HStack, Stack } from '@chakra-ui/layout';
-import { Link, Box, Input, InputGroup, InputLeftElement, Button, FormControl } from "@chakra-ui/react"
+import { Container, Grid, Stack } from '@chakra-ui/layout';
+import {Input, InputGroup, InputLeftElement, Button, FormControl } from "@chakra-ui/react"
 import { GiTrophyCup, GiInfo, GiWhiteTower, GiChecklist, GiCoins } from 'react-icons/gi'
 import { FaFileInvoice, FaLink, FaFileContract } from 'react-icons/fa'
-import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption} from "@chakra-ui/react"
-import { adminContext } from '../context/AdminContext';
 import { handleEdit } from '../helpers/handles';
 import {useHistory, useParams } from 'react-router';
 
 
 const EditUni = () => {
-    const {createUniversity} = useContext(adminContext)
     const { id } = useParams();
     const history = useHistory()
 

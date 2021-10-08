@@ -14,34 +14,35 @@ import {
   useDisclosure,
   useColorModeValue,
   useColorMode,
-  Stack,
-  Heading,
-  Text
+  VStack,
+  Text,
+  useToast
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import { useContext, useState } from 'react';
-import { authContext, useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { ADMIN_EMAIL } from '../helpers/const';
+import { useHistory } from 'react-router';
 
 export default function Navbar() {
+  const history = useHistory()
   const {currentUser, logout} = useAuth()
   // for burger
   const { isOpen, onOpen, onClose } = useDisclosure();
   // for dark/light mode
   const { colorMode, toggleColorMode } = useColorMode()
-  // const [activeUser, setActiveUser] = useState()
-
-  // let user = currentUser ? (
-  //   currentUser.email ?
-  //   setActiveUser(JSON.stringify(currentUser.email)): null
-  // ):(
-  //   null)
-  // console.log
-  // // user = activeUser.replace(/"/g,`"`);
+  const toast = useToast()
 
   const handleClick = async(e) => {
     e.preventDefault()
     logout()
+    toast({
+      description: "Сеанс окончен",
+      variant: 'subtle',
+      status: "info",
+      duration: "5000",
+      isClosable: true
+    })
+    history.push('/')
   }
   
   return (
@@ -74,7 +75,7 @@ export default function Navbar() {
                         fontSize = {'3xl'}
                         fontWeight = {800}
                         color = "white"
-                        textShadow="1px 2px 2px #000, -1px 0px 2px #000"
+                        // textShadow="1px 2px 2px #000, -1px 0px 2px #000"
                         _hover={{
                           bg: useColorModeValue('gray.500', 'yellow.600'),
                         }} 
@@ -91,7 +92,7 @@ export default function Navbar() {
                       href="/"
                       textDecoration='none'
                       fontWeight = {800}
-                      textShadow="1px 1px 1px #fff, -1px 0px 2px #fff"
+                      // textShadow="1px 1px 1px #fff, -1px 0px 2px #fff"
                       _hover={{
                         bg: useColorModeValue('gray.200', 'gray.700'),
                       }} >About Us Page</Link>
@@ -102,7 +103,7 @@ export default function Navbar() {
                       href="/admin"
                       textDecoration='none'
                       fontWeight = {800}
-                      textShadow="1px 1px 1px #fff, -1px 0px 2px #fff"
+                      // textShadow="1px 1px 1px #fff, -1px 0px 2px #fff"
                       _hover={{
                         bg: useColorModeValue('gray.200', 'gray.700'),
                       }} >
@@ -141,8 +142,9 @@ export default function Navbar() {
                       rounded={'md'}
                       href="/"
                       textDecoration='none'
-                      fontWeight = {800}
-                      textShadow="1px 1px 1px #fff, -1px 0px 2px #fff">
+                      fontWeight = {900}
+                      // textShadow="1px 1px 1px #fff, -1px 0px 2px #fff"
+                      >
               { currentUser ? 
                   (
                     currentUser.email ?
@@ -159,22 +161,31 @@ export default function Navbar() {
                 variant={'link'}
                 cursor={'pointer'}
                 minW={0}>
-                <Avatar
-                  size={'sm'}
-                  src={
-                    'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
+                  {currentUser ? (
+                    <Avatar
+                      size={'sm'}
+                      src={
+                        'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
+                      }
+                    />
+
+                  ):(
+                    <Avatar bg="teal.500" />
+                  )
                   }
-                />
               </MenuButton>
               <MenuList>
                   {
                     currentUser ? (
                       <>
-                      <MenuItem  _hover = {{bg: "grey.400"}}>
-
-                        {currentUser.email === ADMIN_EMAIL ? <Link href="/admin">Admin</Link>:null}
-                      </MenuItem>
-                      <MenuDivider/>
+                        {currentUser.email === ADMIN_EMAIL ? 
+                          <>
+                            <MenuItem _hover = {{bg: "grey.500"}}>
+                                <Link href="/admin">Admin</Link>
+                            </MenuItem>
+                            <MenuDivider/>
+                          </>
+                          :null}
                       </>
                     ):(
                       null
@@ -183,19 +194,26 @@ export default function Navbar() {
                   
                   {!currentUser && 
                     <MenuItem _hover = {{bg: "grey.400"}}>
-                      <Link href="/signup">Регистрация</Link>
+                      <Text as = "a" href="/signup">Регистрация</Text>
                     </MenuItem>
                   }
                   
                   {!currentUser && 
                     <MenuItem  _hover = {{bg: "grey.400"}}>
-                      <Link href="/signin">Войти</Link>
+                      <Text as = "a" href="/signin ">Войти</Text>
                     </MenuItem>
                   }
+
+                  {/* {currentUser && 
+                    <MenuItem  _hover = {{bg: "grey.400"}}>
+                      <Text as = "a" href="/favs">Избранное</Text>
+                    </MenuItem>
+                  } */}
                   
                   {currentUser && 
-                    <MenuItem  _hover = {{bg: "grey.400"}}>
-                      <Link onClick = {handleClick} >Выйти</Link>
+                    <MenuItem onClick = {handleClick} _hover = {{bg: "grey.400"}}>
+                      
+                      <Text>Выйти</Text>
                     </MenuItem>
                   }
               </MenuList>
@@ -209,18 +227,48 @@ export default function Navbar() {
 
         {isOpen ? (
           <Box pb={4} display={{ md: 'none' }}>
-            <Stack as={'nav'} spacing={4}>
-                <Link href="/admin">Add University</Link>
-                <Link href="/">About Us Page</Link>
-            </Stack>
+            <VStack as={'nav'} spacing={4}>
+            <Link px={2}
+                      py={1}
+                      rounded={'md'}
+                      href="/admin"
+                      textDecoration='none'
+                      fontWeight = {800}
+                      // textShadow="1px 1px 1px #fff, -1px 0px 2px #fff"
+                      >
+                        {
+                currentUser? 
+                  (
+                    <>
+                    {currentUser.email === ADMIN_EMAIL ? "Add university":null}
+                    </>
+                  ):(
+                  null)
+                }
+                </Link>
+                <Link px={2}
+                      py={1}
+                      rounded={'md'}
+                      textDecoration='none'
+                      fontWeight = {800}
+                      // textShadow="1px 1px 1px #fff, -1px 0px 2px #fff"
+                      _hover = {{
+                        bg: "grey.400",
+                        // textShadow: useColorModeValue("1px 1px 1px #000, -1px 0px 2px #000", "1px 1px 1px #fff, -1px 0px 2px #fff"),
+                       
+
+                      }}
+                      href = '/'
+                      > About Us Page</Link>
+                {/* {currentUser && 
+                    <Link href="/favs" _hover = {{bg: "grey.400"}}>
+                      Избранное
+                    </Link>
+                  } */}
+            </VStack>
           </Box>
         ) : null}
       </Box>
-
-      <Heading>
-        {/* {`The current user is ${JSON.stringify(currentUser, null, 2)}`} */}
-        {/* {`The current user is ${JSON.stringify(currentUser)}`} */}
-      </Heading>
     </>
   );
 }

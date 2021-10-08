@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { collection, doc, onSnapshot, setDoc, addDoc, deleteDoc } from '@firebase/firestore';
+import React, { useState, useEffect } from 'react';
+import { collection, doc, onSnapshot, deleteDoc } from '@firebase/firestore';
 import db from '../Firebase';
-import { isEmpty } from 'lodash';
-import { Container, Grid, HStack, Stack } from '@chakra-ui/layout';
-import { Link, Box, Input, InputGroup, InputLeftElement, Button, FormControl,useColorModeValue } from "@chakra-ui/react"
+
+import { Container, Grid, Stack } from '@chakra-ui/layout';
+import { Link, Input, InputGroup, InputLeftElement, Button, FormControl,useColorModeValue } from "@chakra-ui/react"
 import { GiTrophyCup, GiInfo, GiWhiteTower, GiChecklist, GiCoins } from 'react-icons/gi'
 import { FaFileInvoice, FaLink, FaFileContract } from 'react-icons/fa'
-import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption} from "@chakra-ui/react"
-import { adminContext } from '../context/AdminContext';
+import { Table, Thead, Tbody, Tr, Th, Td, TableCaption} from "@chakra-ui/react"
 import { handleClick} from '../helpers/handles';
 
 
@@ -236,7 +235,7 @@ const AddUni = () => {
                     }}
                         > Save 
                     </Button>
-                </Stack>                
+                </Stack>
             </form>
         </Container>
         {/* <Container p={5} maxW = "container.lg" bg="cyan.500"> */}

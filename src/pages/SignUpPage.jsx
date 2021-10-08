@@ -75,7 +75,7 @@ import { useAuth } from '../context/AuthContext';
           <Stack align={'center'}>
             <Heading fontSize={'4xl'}>Sign up</Heading>
             <Text fontSize={'lg'} color={'gray.600'}>
-              to enjoy all of our cool <Link color={'blue.400'}>features</Link> ✌️
+              to enjoy all of our cool features ✌️
             </Text>
           </Stack>
           <Box
