@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {  doc, onSnapshot, } from '@firebase/firestore';
 import db from '../Firebase';
 import { Container, Grid, Stack } from '@chakra-ui/layout';
-import {Input, InputGroup, InputLeftElement, Button, FormControl } from "@chakra-ui/react"
+import {Input, InputGroup, InputLeftElement, Button, FormControl, Center } from "@chakra-ui/react"
 import { GiTrophyCup, GiInfo, GiWhiteTower, GiChecklist, GiCoins } from 'react-icons/gi'
 import { FaFileInvoice, FaLink, FaFileContract } from 'react-icons/fa'
 import { handleEdit } from '../helpers/handles';
@@ -40,12 +40,12 @@ const EditUni = () => {
 
 
     return (
-        <>
-        <Container p={8} maxW = "container.sm" bg="cyan.800">
+        <Center p={20}>
+        <Container p={8} maxW = "container.sm" bg="cyan.600">
             <form action = "submit" 
             // onSubmit = {handleSubmit}
             >
-                <Stack spacing={3} color="gray.500">
+                <Stack spacing={3} color="gray.200">
                     {/* name */}
                     <FormControl isRequired>
                         <InputGroup>
@@ -184,7 +184,7 @@ const EditUni = () => {
                                  />
                         </InputGroup>
                     </FormControl>
-                    <Button
+                    <Button color ={"grey"}
                     onClick = {(e) => {
                         e.preventDefault()
                         handleEdit(id, EditedUni)
@@ -196,7 +196,7 @@ const EditUni = () => {
                 </Stack>                
             </form>
         </Container>
-        </>
+        </Center>
     );
 };
 

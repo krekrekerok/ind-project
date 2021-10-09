@@ -8,16 +8,7 @@ import {createUserWithEmailAndPassword,
         confirmPasswordReset
         } from "firebase/auth"
 
-const authContext = createContext(
-//     {
-//     currentUser: null,
-//     register: () => Promise,
-//     login: () => Promise,
-//     logout: () => Promise,
-//     forgotPassword: () => Promise,
-//     resetPassword: () => Promise,
-// }
-)
+const authContext = createContext()
 
 export const useAuth = () => useContext(authContext)
 
@@ -42,7 +33,6 @@ const AuthContextProvider = ({children}) => {
     }
     
     const logout = () => {
-        // const userEmail = JSON.stringify(currentUser.email)
         return signOut(auth)
     }
 

@@ -12,7 +12,6 @@ import {
     useColorModeValue,
     useToast
   } from '@chakra-ui/react';
-  // import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useAuth } from '../context/AuthContext';

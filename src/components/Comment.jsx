@@ -113,7 +113,7 @@ const Comments = () => {
                             <Th isNumeric></Th>
                             <Th>Name</Th>
                             <Th>Comment</Th>
-                            <Th></Th>
+                            {/* <Th></Th> */}
                         </Tr>
                     </Thead>
 
@@ -123,7 +123,7 @@ const Comments = () => {
                                 <Td isNumeric>{index + 1}</Td>
                                 <Td>{row.name}</Td>
                                 <Td>{row.commentText}</Td>
-                                <Td>
+                                {/* <Td>
                                     <Button    
                                             onClick = {()=>deleteComment(row.id)}
                                             px={2}
@@ -137,7 +137,7 @@ const Comments = () => {
                                             }} 
                                         >DEL
                                     </Button>
-                                </Td>
+                                </Td> */}
                             </Tr>
                         ))}
                     </Tbody>
